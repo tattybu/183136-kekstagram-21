@@ -36,21 +36,9 @@
   const comment = document.querySelector(`.text__description`);
   const hashTags = document.querySelector(`.text__hashtags`);
 
-  const showElement = function (element) {
-    if (element.classList.contains(`hidden`)) {
-      element.classList.remove(`hidden`);
-    }
-  };
-
-  const hideElement = function (element) {
-    if (!element.classList.contains(`hidden`)) {
-      element.classList.add(`hidden`);
-    }
-  };
-
   const showPhotoEditForm = function (element) {
     photosize = PHOTO_SIZE.MAX;
-    showElement(element);
+    window.utils.showElement(element);
     document.addEventListener(`keydown`, onPhotoEditFormEscPress);
     applyPicturefilter(noEffectImage);
     photoPreviewImage.style = `transform: scale(1)`;
@@ -58,7 +46,7 @@
 
   const hidePhotoEditForm = function (element) {
     if (!element.classList.contains(`hidden`)) {
-      element.classList.add(`hidden`);
+      window.utils.hideElement(element);
       document.removeEventListener(`keydown`, onPhotoEditFormEscPress);
       uploadFile.value = ``;
     }
@@ -132,10 +120,10 @@
     photoPreview.classList.add(`effects__preview--` + value);
 
     if (value === `none`) {
-      hideElement(imageUploadEffectsLevel);
+      window.utils.hideElement(imageUploadEffectsLevel);
       photoPreview.style = ``;
     } else {
-      showElement(imageUploadEffectsLevel);
+      window.utils.showElement(imageUploadEffectsLevel);
       addEffectLevelValue(PHOTO_EFFECT_VOLUME_DEFAULT, effects[value]);
     }
   };
