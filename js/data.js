@@ -1,6 +1,7 @@
 'use strict';
 
-window.data = (function () {
+(function () {
+
   const AUTHOR_NAMES = [
     `Евлампий`,
     `Шурочка`,
@@ -46,41 +47,32 @@ window.data = (function () {
     MAX: 200
   };
 
-  const getRandomNumber = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
+  const createComment = (minComments, maxComments) => {
+    const comments = [];
+    for (let i = 0; i < window.utils.getRandomNumber(minComments, maxComments); i++) {
 
-  const getRandomElement = function (array) {
-    return array[getRandomNumber(0, array.length - 1)];
-  };
-
-  const createComment = function (amountOfComment) {
-    let array = [];
-    for (let i = 0; i < amountOfComment; i++) {
-      const commentOptions = {
-        avatar: `img/avatar-` + getRandomNumber(AVATAR_LIMITS.MIN, AVATAR_LIMITS.MAX) + `.svg`,
-        message: getRandomElement(COMMENTS),
-        name: getRandomElement(AUTHOR_NAMES),
+      const comment = {
+        avatar: `img/avatar` + window.utils.getRandomNumber(AVATAR_LIMITS.MIN, AVATAR_LIMITS.MAX) + `.svg`,
+        message: COMMENTS[window.utils.getRandomNumber(0, COMMENTS.length - 1)],
+        name: AUTHOR_NAMES[window.utils.getRandomNumber(0, AUTHOR_NAMES.length - 1)]
       };
-      array.push(commentOptions);
+      comments.push(comment);
     }
-    return array;
+    return comments;
   };
 
-  return {
-    createPhotos(amountOfPhotos) {
-      let array = [];
-      for (let i = 1; i <= amountOfPhotos; i++) {
-        const numberOfComments = getRandomNumber(NUMBER_OF_COMMENTS.MIN, NUMBER_OF_COMMENTS.MAX);
-        const photosInfo = {
-          url: `photos/` + i + `.jpg`,
-          likes: getRandomNumber(NUMBER_OF_LIKES.MIN, NUMBER_OF_LIKES.MAX),
-          comment: createComment(numberOfComments),
-          description: getRandomElement(DESCRIPTIONS)
-        };
-        array.push(photosInfo);
-      }
-      return array;
-    }
+  const createPhotos = (i = 0) => {
+    const photos = {
+      url: `photos/` + i + `.jpg`,
+      description: window.utils.getRandomNumber(DESCRIPTIONS),
+      likes: window.utils.getRandomNumber(NUMBER_OF_LIKES.MIN, NUMBER_OF_LIKES.MAX),
+      comments: createComment(NUMBER_OF_COMMENTS.MIN, NUMBER_OF_COMMENTS.MAX)
+    };
+    return photos;
+  };
+
+  window.data = {
+    createPhotos
   };
 })();
+

@@ -1,32 +1,25 @@
 'use strict';
 
 (function () {
+
   const PHOTOS_AMOUNT = 25;
+  const similarElement = document.querySelector(`.pictures`);
+  const randomUsersTemplate = document.querySelector(`#picture`).content.querySelector(`.picture`);
 
-  const photoListElement = document.querySelector(`.pictures`);
-  const userPictureTemplate = document.querySelector(`#picture`).content.querySelector(`.picture`);
   const fragment = document.createDocumentFragment();
+  for (let i = 1; i <= PHOTOS_AMOUNT; i++) {
 
-  const addPhotos = function (photos) {
 
-    const photoElement = userPictureTemplate.cloneNode(true);
+    const generatedUser = window.data.createPhotos(i);
+    randomUsersTemplate.querySelector(`.picture__img`).src = generatedUser.url;
+    randomUsersTemplate.querySelector(`.picture__comments`).textContent = generatedUser.comments.length;
+    randomUsersTemplate.querySelector(`.picture__likes`).textContent = generatedUser.likes;
 
-    photoElement.querySelector(`.picture__img`).src = photos.url;
-    photoElement.querySelector(`.picture__likes`).textContent = photos.likes;
-    photoElement.querySelector(`.picture__comments`).textContent = photos.comment.length;
+    const userELement = randomUsersTemplate.cloneNode(true);
 
-    return photoElement;
-  };
-
-  let photos = [];
-
-  photos = window.utils.reshuffleArray(window.data.createPhotos(PHOTOS_AMOUNT));
-
-  for (let i = 0; i < PHOTOS_AMOUNT; i++) {
-    fragment.appendChild(addPhotos(photos[i]));
-
+    fragment.appendChild(userELement);
   }
 
-  photoListElement.appendChild(fragment);
+  similarElement.appendChild(fragment);
 
 })();
