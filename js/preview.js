@@ -32,13 +32,11 @@
   const templateComment = socialComment.cloneNode(true);
 
 
-  const getRandom = (min, max) =>
-    Math.floor(min + Math.random() * (max + 1 - min));
-  const getRandomFrom = (arr) => arr[getRandom(0, arr.length - 1)];
+  const getRandomFrom = (arr) => arr[window.utils.getRandomNumber(0, arr.length - 1)];
 
   const generateComments = (amount) => {
     return new Array(amount).fill(``).map(() => ({
-      avatar: `img/avatar-${getRandom(1, AVATARS_AMOUNT)}.svg`,
+      avatar: `img/avatar-${window.utils.getRandomNumber(1, AVATARS_AMOUNT)}.svg`,
       message: getRandomFrom(COMMENTS),
       name: getRandomFrom(AUTHOR_NAMES),
     }));
@@ -48,8 +46,8 @@
     new Array(amount).fill(``).map((_, idx) => ({
       url: `photos/${idx + 1}.jpg`,
       description: `Это потрясающе`,
-      likes: getRandom(15, 200),
-      comments: generateComments(getRandom(1, COMMENTS_AMOUNT)),
+      likes: window.utils.getRandomNumber(15, 200),
+      comments: generateComments(window.utils.getRandomNumber(1, COMMENTS_AMOUNT)),
     }));
 
   const renderPicture = (picture) => {
