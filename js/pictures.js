@@ -6,7 +6,7 @@
   const renderPictures = function (pictures) {
 
     const similarElement = document.querySelector(`.pictures`);
-    let fragment = createPictures(pictures);
+    const fragment = createPictures(pictures);
 
     similarElement.appendChild(fragment);
 
@@ -37,7 +37,7 @@
 
     likes.textContent = picture.likes;
 
-    comments.textContent = String(picture.comments.length);
+    comments.textContent = (picture.comments.length);
 
     fragment.appendChild(pictureClone);
 
