@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(() => {
 
   const getData = (onSuccess, onError) => {
 
@@ -9,7 +9,7 @@
 
     xhr.responseType = `json`;
 
-    xhr.addEventListener(`load`, function () {
+    xhr.addEventListener(`load`, () => {
       if (xhr.status === 200) {
         onSuccess(xhr.response);
       } else {
@@ -17,11 +17,11 @@
       }
     });
 
-    xhr.addEventListener(`error`, function () {
+    xhr.addEventListener(`error`, () => {
       onError(`Ошибка соединения`);
     });
 
-    xhr.addEventListener(`timeout`, function () {
+    xhr.addEventListener(`timeout`, () => {
       onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
     });
 

@@ -1,10 +1,7 @@
 'use strict';
 
-(function () {
-  const getRandomNumber = (min, max) => {
-    const rand = min + Math.random() * (max + 1 - min);
-    return Math.floor(rand);
-  };
+(() => {
+  const getRandomNumber = (min, max) => Math.floor(min + Math.random() * (max + 1 - min));
 
   const showElement = (element) => {
     if (element.classList.contains(`hidden`)) {
@@ -30,12 +27,20 @@
     return array;
   };
 
-
+  const onModalOpenKeydown = (evt) => {
+    if (evt.key === `Escape`) {
+      evt.preventDefault();
+      hideElement();
+      window.gallery.closeBigPhotoElement();
+    }
+  };
   window.utils = {
     getRandomNumber,
     showElement,
     hideElement,
     reshuffleArray,
+    onModalOpenKeydown,
   };
 })();
+
 
