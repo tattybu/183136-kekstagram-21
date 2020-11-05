@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(() => {
   const PHOTO_SIZE = {
     MIN: 25,
     MAX: 100
@@ -36,7 +36,7 @@
   const comment = document.querySelector(`.text__description`);
   const hashTags = document.querySelector(`.text__hashtags`);
 
-  const showPhotoEditForm = function (element) {
+  const showPhotoEditForm = (element) => {
     photosize = PHOTO_SIZE.MAX;
     window.utils.showElement(element);
     document.addEventListener(`keydown`, onPhotoEditFormEscPress);
@@ -44,7 +44,7 @@
     photoPreviewImage.style = `transform: scale(1)`;
   };
 
-  const hidePhotoEditForm = function (element) {
+  const hidePhotoEditForm = (element) =>{
     if (!element.classList.contains(`hidden`)) {
       window.utils.hideElement(element);
       document.removeEventListener(`keydown`, onPhotoEditFormEscPress);
@@ -52,13 +52,13 @@
     }
   };
 
-  const onPhotoEditFormEscPress = function (evt) {
+  const onPhotoEditFormEscPress = (evt) => {
     if (evt.keyCode === ESC_KEYCODE && evt.target !== comment && evt.target !== hashTags) {
       hidePhotoEditForm(photoEditForm);
     }
   };
 
-  const addHashTagsValidation = function () {
+  const addHashTagsValidation = () => {
     const hashTagsData = hashTags.value.trim().split(/\s+/gi);
     let message = ``;
 
@@ -78,11 +78,11 @@
 
   };
 
-  hashTags.addEventListener(`input`, function () {
+  hashTags.addEventListener(`input`, () => {
     addHashTagsValidation();
   });
 
-  const hashtagValidation = function (hashTagsData, i) {
+  const hashtagValidation = (hashTagsData, i) => {
     let message = ``;
     if (hashTagsData[i].charAt(0) !== `#`) {
       message = `Хеш-теги должны начинаться с "#"`;
@@ -103,7 +103,7 @@
   };
 
 
-  const changeSizePhotoPreview = function (button) {
+  const changeSizePhotoPreview = (button) => {
     if (button.target.classList.contains(`scale__control--bigger`) && photosize < PHOTO_SIZE.MAX) {
       photosize += PHOTO_SIZE_CHANGE_STEP;
     } else if ((button.target.classList.contains(`scale__control--smaller`) && photosize > PHOTO_SIZE.MIN)) {
@@ -113,7 +113,7 @@
     photoPreviewImage.style = `transform: scale(` + (photosize / 100) + `)`;
   };
 
-  const applyPicturefilter = function (element) {
+  const applyPicturefilter = (element) => {
     value = element.value;
 
     photoPreview.classList = `img-upload__preview`;
@@ -128,7 +128,7 @@
     }
   };
 
-  const addEffectLevelValue = function (percent, effect) {
+  const addEffectLevelValue = (percent, effect) => {
     imageEffectPin.style.left = percent + `%`;
     imageEffectDepth.style.width = percent + `%`;
     let valuePercent = (effect[2] - effect[1]) / PHOTO_EFFECT_VOLUME_DEFAULT * percent;
@@ -137,33 +137,33 @@
     photoPreview.style = `filter: ` + effect[0] + `(` + valueInput.toFixed(2) + effect[3] + `)`;
   };
 
-  const getEffectValue = function (percent) {
+  const getEffectValue = (percent) => {
     if (percent >= 0 && percent <= PERCENT_MAX) {
       addEffectLevelValue(percent, effects[value]);
     }
   };
 
-  uploadFile.addEventListener(`change`, function () {
+  uploadFile.addEventListener(`change`, () => {
     showPhotoEditForm(photoEditForm);
   });
 
-  photoEditFormClose.addEventListener(`click`, function (evt) {
+  photoEditFormClose.addEventListener(`click`, (evt) => {
     evt.preventDefault();
     hidePhotoEditForm(photoEditForm);
   });
 
   photoChangeSize.addEventListener(`click`, changeSizePhotoPreview);
 
-  imageUploadEffects.addEventListener(`change`, function (evt) {
+  imageUploadEffects.addEventListener(`change`, (evt) => {
     applyPicturefilter(evt.target);
   });
 
-  imageEffectPin.addEventListener(`mousedown`, function (evt) {
+  imageEffectPin.addEventListener(`mousedown`, (evt) => {
     evt.preventDefault();
 
     let startCoords = evt.clientX;
 
-    let onMouseMove = function (moveEvt) {
+    let onMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
 
       let lineWidth = imageEffectLine.clientWidth;
@@ -174,7 +174,7 @@
       getEffectValue((imageEffectPin.offsetLeft - shift) * 100 / lineWidth);
     };
 
-    const onMouseUp = function (upEvt) {
+    const onMouseUp = (upEvt) => {
       upEvt.preventDefault();
 
       document.removeEventListener(`mousemove`, onMouseMove);
@@ -185,6 +185,9 @@
     document.addEventListener(`mouseup`, onMouseUp);
   });
 
+  window.form = {
+    hidePhotoEditForm,
+  };
 
 })();
 
