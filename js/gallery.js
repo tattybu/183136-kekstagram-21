@@ -2,6 +2,8 @@
 
 // Модуль для отрисовки миниатюр и увеличенного изображения
 (() => {
+  const ESC_KEYCODE = 27;
+  const ENTER_KEYCODE = 13;
   const photosElement = document.querySelector(`.pictures`);
   const photosTemplate = document.querySelector(`#picture`).content.querySelector(`.picture`);
 
@@ -15,34 +17,29 @@
     return photoElement;
   };
 
-  const onPhotoElementClick = (evt) => {
-    if (evt.target && evt.target.matches(`img[class=picture__img]`)) {
-      bigPhotoElement.querySelector(`.big-picture__img img`).src = evt.target.src;
+  const addPictureEvents = (photoElement, photo) => {
 
-      openBigPhotoElement();
-    }
-  };
-
-  const onPhotoElementKeydown = (evt) =>{
-    if (evt.key === `Enter`) {
-      for (let i = 0; i < photosElement.length; i++) {
-        const photo = photosElement[i];
-        if (photo === document.activeElement) {
-          bigPhotoElement.querySelector(`.big-picture__img img`).src = photo.querySelector(`.big-picture__img img`).src;
-          openBigPhotoElement();
-        }
+    photoElement.addEventListener(`click`, (evt) => {
+      if (evt.target && evt.target.matches(`img[class=picture__img]`)) {
+        openBigPhotoElement(photo);
       }
-    }
+    });
+
+    photoElement.addEventListener(`keydown`, (evt) => {
+      if (evt.keyCode === ENTER_KEYCODE) {
+        bigPhotoElement.querySelector(`.big-picture__img img`).src = photo.url;
+        openBigPhotoElement(photo);
+      }
+    });
   };
 
   const createPicturesList = (photos) => {
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < photos.length; i++) {
-      const createdPhoto = createPhotos(photos[i]);
-      fragment.appendChild(createdPhoto);
-
-      createdPhoto.addEventListener(`click`, onPhotoElementClick);
-      createdPhoto.addEventListener(`keydown`, onPhotoElementKeydown);
+      const photo = photos[i];
+      const photoElement = createPhotos(photo);
+      addPictureEvents(photoElement, photo);
+      fragment.appendChild(photoElement);
     }
 
     return fragment;
@@ -92,17 +89,25 @@
 
   // Просмотр любого изображения в полноэкранном режиме
 
-  const openBigPhotoElement = () => {
+  const onModalOpenKeydown = (evt) => {
+    if (evt.keyCode === ESC_KEYCODE) {
+      evt.preventDefault();
+      closeBigPhotoElement();
+    }
+  };
+
+  const openBigPhotoElement = (photo) => {
+    bigPhotoElement.querySelector(`.big-picture__img img`).src = photo.url;
     bigPhotoElement.classList.remove(`hidden`);
     closeButtonBigImg.addEventListener(`click`, closeBigPhotoElement);
-    document.addEventListener(`keydown`, window.utils.onModalOpenKeydown);
+    document.addEventListener(`keydown`, onModalOpenKeydown);
     document.querySelector(`body`).classList.add(`modal-open`);
   };
 
   const closeBigPhotoElement = () => {
     bigPhotoElement.classList.add(`hidden`);
     closeButtonBigImg.removeEventListener(`click`, closeBigPhotoElement);
-    document.removeEventListener(`keydown`, window.utils.onModalOpenKeydown);
+    document.removeEventListener(`keydown`, onModalOpenKeydown);
     document.querySelector(`body`).classList.remove(`modal-open`);
   };
 

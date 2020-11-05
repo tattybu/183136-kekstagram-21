@@ -27,19 +27,11 @@
     return array;
   };
 
-  const onModalOpenKeydown = (evt) => {
-    if (evt.key === `Escape`) {
-      evt.preventDefault();
-      hideElement();
-      window.gallery.closeBigPhotoElement();
-    }
-  };
   window.utils = {
     getRandomNumber,
     showElement,
     hideElement,
-    reshuffleArray,
-    onModalOpenKeydown,
+    reshuffleArray
   };
 })();
 
