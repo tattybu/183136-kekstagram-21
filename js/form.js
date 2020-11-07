@@ -7,7 +7,6 @@
   };
   const PHOTO_SIZE_CHANGE_STEP = 25;
   const PHOTO_EFFECT_VOLUME_DEFAULT = 100;
-  const PERCENT_MAX = 100;
   const ESC_KEYCODE = 27;
   const uploadFile = document.querySelector(`#upload-file`);
   const photoEditForm = document.querySelector(`.img-upload__overlay`);
@@ -19,18 +18,7 @@
   const imageUploadEffects = document.querySelector(`.effects__list`);
   const noEffectImage = imageUploadEffects.children[0].children[0];
   const imageUploadEffectsLevel = document.querySelector(`.img-upload__effect-level`);
-  const imageEffectLevelValue = imageUploadEffectsLevel.querySelector(`.effect-level__value`);
-  const imageEffectLine = imageUploadEffectsLevel.querySelector(`.effect-level__line`);
-  const imageEffectPin = imageUploadEffectsLevel.querySelector(`.effect-level__pin`);
-  const imageEffectDepth = imageUploadEffectsLevel.querySelector(`.effect-level__depth`);
   let photosize;
-  const effects = {
-    chrome: [`grayscale`, 0, 1, ``],
-    sepia: [`sepia`, 0, 1, ``],
-    marvin: [`invert`, 0, 100, `%`],
-    phobos: [`blur`, 0, 3, `px`],
-    heat: [`brightness`, 1, 3, ``]
-  };
   let value = ``;
 
   const comment = document.querySelector(`.text__description`);
@@ -77,22 +65,7 @@
       photoPreview.style = ``;
     } else {
       window.utils.showElement(imageUploadEffectsLevel);
-      addEffectLevelValue(PHOTO_EFFECT_VOLUME_DEFAULT, effects[value]);
-    }
-  };
-
-  const addEffectLevelValue = (percent, effect) => {
-    imageEffectPin.style.left = percent + `%`;
-    imageEffectDepth.style.width = percent + `%`;
-    let valuePercent = (effect[2] - effect[1]) / PHOTO_EFFECT_VOLUME_DEFAULT * percent;
-    let valueInput = effect[1] + valuePercent;
-    imageEffectLevelValue.textContent = valueInput.toFixed(2);
-    photoPreview.style = `filter: ` + effect[0] + `(` + valueInput.toFixed(2) + effect[3] + `)`;
-  };
-
-  const getEffectValue = (percent) => {
-    if (percent >= 0 && percent <= PERCENT_MAX) {
-      addEffectLevelValue(percent, effects[value]);
+      window.slider.effectsIntensive(PHOTO_EFFECT_VOLUME_DEFAULT, window.slider.EFFECT_VALUES[value]);
     }
   };
 
@@ -109,33 +82,6 @@
 
   imageUploadEffects.addEventListener(`change`, (evt) => {
     applyPicturefilter(evt.target);
-  });
-
-  imageEffectPin.addEventListener(`mousedown`, (evt) => {
-    evt.preventDefault();
-
-    let startCoords = evt.clientX;
-
-    let onMouseMove = (moveEvt) => {
-      moveEvt.preventDefault();
-
-      let lineWidth = imageEffectLine.clientWidth;
-      let shift = startCoords - moveEvt.clientX;
-
-      startCoords = moveEvt.clientX;
-
-      getEffectValue((imageEffectPin.offsetLeft - shift) * 100 / lineWidth);
-    };
-
-    const onMouseUp = (upEvt) => {
-      upEvt.preventDefault();
-
-      document.removeEventListener(`mousemove`, onMouseMove);
-      document.removeEventListener(`mouseup`, onMouseUp);
-    };
-
-    document.addEventListener(`mousemove`, onMouseMove);
-    document.addEventListener(`mouseup`, onMouseUp);
   });
 
   window.form = {
