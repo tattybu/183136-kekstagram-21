@@ -1,8 +1,8 @@
 'use strict';
 (function () {
-  let effects = document.querySelectorAll(`.effects__radio`);
-  let imgPreview = document.querySelector(`.img-upload__preview`);
-  let effectLevelValue = document.querySelector(`.effect-level__value`);
+  const effects = document.querySelectorAll(`.effects__radio`);
+  const imgPreview = document.querySelector(`.img-upload__preview`);
+  const effectLevelValue = document.querySelector(`.effect-level__value`);
 
   const EFFECT_VALUE = 100;
 
@@ -34,13 +34,13 @@
     },
   };
 
-  let effectsIntensive = function (effect) {
+  const effectsIntensive = function (effect) {
     if (effect.value !== `none`) {
-      let min = EFFECT_VALUES[effect.value].min;
-      let max = EFFECT_VALUES[effect.value].max;
-      let template = EFFECT_VALUES[effect.value].template;
+      const min = EFFECT_VALUES[effect.value].min;
+      const max = EFFECT_VALUES[effect.value].max;
+      const template = EFFECT_VALUES[effect.value].template;
 
-      let result = min + ((max - min) / 100 * effectLevelValue.value);
+      const result = min + ((max - min) / 100 * effectLevelValue.value);
       imgPreview.style = `filter: ` + template.replace(`{value}`, result);
     } else {
       imgPreview.style = null;
@@ -60,9 +60,9 @@
     });
   });
 
-  let sliderPin = document.querySelector(`.effect-level__pin`);
-  let sliderLine = document.querySelector(`.effect-level__line`);
-  let sliderDepth = document.querySelector(`.effect-level__depth`);
+  const sliderPin = document.querySelector(`.effect-level__pin`);
+  const sliderLine = document.querySelector(`.effect-level__line`);
+  const sliderDepth = document.querySelector(`.effect-level__depth`);
 
   sliderPin.addEventListener(`mousedown`, function (evt) {
     evt.preventDefault();
@@ -96,7 +96,7 @@
 
       effectLevelValue.value = rounded;
 
-      let effect = document.querySelector(`input[name=effect]:checked`);
+      const effect = document.querySelector(`input[name=effect]:checked`);
       effectsIntensive(effect);
     };
 
@@ -112,7 +112,7 @@
   });
 
   window.slider = {
-    EFFECT_VALUES,
     effectsIntensive,
   };
 })();
+

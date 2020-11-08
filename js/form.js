@@ -6,7 +6,6 @@
     MAX: 100
   };
   const PHOTO_SIZE_CHANGE_STEP = 25;
-  const PHOTO_EFFECT_VOLUME_DEFAULT = 100;
   const ESC_KEYCODE = 27;
   const uploadFile = document.querySelector(`#upload-file`);
   const photoEditForm = document.querySelector(`.img-upload__overlay`);
@@ -65,7 +64,6 @@
       photoPreview.style = ``;
     } else {
       window.utils.showElement(imageUploadEffectsLevel);
-      window.slider.effectsIntensive(PHOTO_EFFECT_VOLUME_DEFAULT, window.slider.EFFECT_VALUES[value]);
     }
   };
 
