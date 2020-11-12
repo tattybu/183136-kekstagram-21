@@ -50,6 +50,6 @@
     }
     uploadSelectImageForm.reportValidity();
   };
+
   hashTags.addEventListener(`input`, addHashTagsValidation);
 })();
- 
