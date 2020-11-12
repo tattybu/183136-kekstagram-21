@@ -1,90 +1,63 @@
 'use strict';
 
 (() => {
-  const PHOTO_SIZE = {
-    MIN: 25,
-    MAX: 100
-  };
-  const PHOTO_SIZE_CHANGE_STEP = 25;
-  const ESC_KEYCODE = 27;
+  const uploadForm = document.querySelector(`.img-upload__form`);
   const uploadFile = document.querySelector(`#upload-file`);
   const photoEditForm = document.querySelector(`.img-upload__overlay`);
+  const body = document.querySelector(`body`);
   const photoEditFormClose = photoEditForm.querySelector(`#upload-cancel`);
+  const textDescription = document.querySelector(`.text__description`);
   const photoPreview = document.querySelector(`.img-upload__preview`);
-  const photoPreviewImage = photoPreview.getElementsByTagName(`img`)[0];
-  const photoChangeSize = document.querySelector(`.img-upload__scale`);
-  const photoSizeValue = photoChangeSize.querySelector(`.scale__control--value`);
-  const imageUploadEffects = document.querySelector(`.effects__list`);
-  const noEffectImage = imageUploadEffects.children[0].children[0];
-  const imageUploadEffectsLevel = document.querySelector(`.img-upload__effect-level`);
-  let photosize;
-  let value = ``;
+  const preview = photoPreview.querySelector(`img`);
+  const effectLevel = document.querySelector(`.effect-level`);
 
-  const comment = document.querySelector(`.text__description`);
-  const showPhotoEditForm = (element) => {
-    photosize = PHOTO_SIZE.MAX;
-    window.utils.showElement(element);
-    document.addEventListener(`keydown`, onPhotoEditFormEscPress);
-    applyPicturefilter(noEffectImage);
-    photoPreviewImage.style = `transform: scale(1)`;
-  };
-
-  const hidePhotoEditForm = (element) => {
-    if (!element.classList.contains(`hidden`)) {
-      window.utils.hideElement(element);
-      document.removeEventListener(`keydown`, onPhotoEditFormEscPress);
-      uploadFile.value = ``;
+  const onUploadFormEscPress = function (evt) {
+    if (evt.key === window.constants.ESCAPE && textDescription !== document.activeElement) {
+      evt.preventDefault();
+      closeUploadForm();
     }
   };
 
-  const onPhotoEditFormEscPress = (evt) => {
-    if (evt.keyCode === ESC_KEYCODE && evt.target !== comment && evt.target !== window.validation.hashTags) {
-      hidePhotoEditForm(photoEditForm);
-    }
+  const onCancelClick = function () {
+    closeUploadForm();
   };
 
-  const changeSizePhotoPreview = (button) => {
-    if (button.target.classList.contains(`scale__control--bigger`) && photosize < PHOTO_SIZE.MAX) {
-      photosize += PHOTO_SIZE_CHANGE_STEP;
-    } else if ((button.target.classList.contains(`scale__control--smaller`) && photosize > PHOTO_SIZE.MIN)) {
-      photosize -= PHOTO_SIZE_CHANGE_STEP;
-    }
-    photoSizeValue.value = `` + photosize;
-    photoPreviewImage.style = `transform: scale(` + (photosize / 100) + `)`;
+  const openUploadForm = function () {
+    window.uploadPicture(uploadFile, preview);
+    body.classList.add(`modal-open`);
+    effectLevel.classList.add(`hidden`);
+    photoEditForm.classList.remove(`hidden`);
+    document.addEventListener(`keydown`, onUploadFormEscPress);
+    photoEditFormClose.addEventListener(`click`, onCancelClick);
   };
 
-  const applyPicturefilter = (element) => {
-    value = element.value;
-
-    photoPreview.classList = `img-upload__preview`;
-    photoPreview.classList.add(`effects__preview--` + value);
-
-    if (value === `none`) {
-      window.utils.hideElement(imageUploadEffectsLevel);
-      photoPreview.style = ``;
-    } else {
-      window.utils.showElement(imageUploadEffectsLevel);
-    }
+  const closeUploadForm = function () {
+    photoEditForm.classList.add(`hidden`);
+    photoEditForm.value = ``;
+    preview.src = ``;
+    body.classList.remove(`modal-open`);
+    window.effects.reset();
+    document.removeEventListener(`keydown`, onUploadFormEscPress);
+    photoEditFormClose.removeEventListener(`click`, onCancelClick);
   };
 
-  uploadFile.addEventListener(`change`, () => {
-    showPhotoEditForm(photoEditForm);
-  });
+  const successSend = function () {
+    photoEditForm.classList.add(`hidden`);
+    window.popup.success();
+  };
 
-  photoEditFormClose.addEventListener(`click`, (evt) => {
+  const errorSend = function (errorMessage) {
+    photoEditForm.classList.add(`hidden`);
+    window.popup.error(errorMessage);
+  };
+
+  const onSubmitForm = function (evt) {
+    window.backend.upload(new FormData(uploadForm), successSend, errorSend);
     evt.preventDefault();
-    hidePhotoEditForm(photoEditForm);
-  });
-
-  photoChangeSize.addEventListener(`click`, changeSizePhotoPreview);
-
-  imageUploadEffects.addEventListener(`change`, (evt) => {
-    applyPicturefilter(evt.target);
-  });
-
-  window.form = {
-    hidePhotoEditForm
+    window.effects.reset();
+    uploadForm.reset();
   };
 
+  uploadFile.addEventListener(`change`, openUploadForm);
+  uploadForm.addEventListener(`submit`, onSubmitForm);
 })();
-
