@@ -46,9 +46,14 @@
     window.popup.success();
   };
 
+  const hideErrorButton = function () {
+    const hide = document.querySelector(`.error__button`);
+    hide.classList.add(`hidden`);
+  };
   const errorSend = function (errorMessage) {
     photoEditForm.classList.add(`hidden`);
     window.popup.error(errorMessage);
+    hideErrorButton();
   };
 
   const onSubmitForm = function (evt) {
