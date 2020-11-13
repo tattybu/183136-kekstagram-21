@@ -41,9 +41,15 @@
     photoEditFormClose.removeEventListener(`click`, onCancelClick);
   };
 
+  const showErrorButton = function () {
+    const show = document.querySelector(`.error__button`);
+    show.classList.remove(`hidden`);
+  };
+
   const successSend = function () {
     photoEditForm.classList.add(`hidden`);
     window.popup.success();
+    showErrorButton();
   };
 
   const hideErrorButton = function () {
