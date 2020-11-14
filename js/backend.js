@@ -1,17 +1,21 @@
 'use strict';
 
 (() => {
-  const URL = `https://21.javascript.pages.academy/kekstagram`;
+  const END_POINT = `https://21.javascript.pages.academy/kekstagram`;
   const TIMEOUT_IN_MS = 10000;
   const StatusCode = {
     OK: 200
   };
-  const messageOfError = {
+  const MessageOfError = {
     400: `Неверный запрос`,
     401: `Пользователь не авторизирован`,
     403: `Доступ запрещен`,
     404: `Ничего не найдено`,
     500: `Внутренняя ошибка сервера`
+  };
+  const Method = {
+    GET: `GET`,
+    POST: `POST`
   };
 
   const createXhr = function (onSuccess, onError) {
@@ -22,7 +26,7 @@
       if (xhr.status === StatusCode.OK) {
         onSuccess(xhr.response);
       } else {
-        onError(`Статус ответа: ${messageOfError[xhr.status]}`);
+        onError(`Статус ответа: ${MessageOfError[xhr.status]}`);
       }
     });
 
@@ -40,13 +44,13 @@
 
   const download = function (onSuccess, onError) {
     const xhr = createXhr(onSuccess, onError);
-    xhr.open(`GET`, `${URL}/data`);
+    xhr.open(Method.GET, `${END_POINT}/data`);
     xhr.send();
   };
 
   const upload = function (data, onSuccess, onError) {
     const xhr = createXhr(onSuccess, onError);
-    xhr.open(`POST`, URL);
+    xhr.open(Method.POST, END_POINT);
     xhr.send(data);
   };
 

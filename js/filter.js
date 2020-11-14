@@ -1,8 +1,11 @@
 'use strict';
-
 (() => {
-  const MAX_PHOTOS = 10;
-
+  const MAX_UNIQUE_PHOTOS = 10;
+  const FilterId = {
+    DEFAULT: `filter-default`,
+    RANDOM: `filter-random`,
+    DISCUSSED: `filter-discussed`
+  };
   const getDiscussedPhoto = function (data) {
     return data.sort(function (a, b) {
       return b.comments.length - a.comments.length;
@@ -12,7 +15,7 @@
   const getRandomPhotos = function (data) {
     return data.sort(function () {
       return window.util.getRandomInt(-1, 1);
-    }).slice(0, MAX_PHOTOS);
+    }).slice(0, MAX_UNIQUE_PHOTOS);
   };
 
   const activeFilter = function (filter) {
@@ -27,11 +30,11 @@
     const copyData = data.slice();
     activeFilter(filter);
     switch (filter.id) {
-      case `filter-default`:
+      case FilterId.DEFAULT:
         return copyData;
-      case `filter-random`:
+      case FilterId.RANDOM:
         return getRandomPhotos(copyData);
-      case `filter-discussed`:
+      case FilterId.DISCUSSED:
         return getDiscussedPhoto(copyData);
     }
     return copyData;
