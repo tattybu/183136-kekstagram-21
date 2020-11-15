@@ -5,7 +5,7 @@
   const imgFilter = document.querySelector(`.img-filters`);
   const pictureContainer = document.querySelector(`.pictures`);
 
-  imgFilter.classList.remove(`img-filters--inactive`);
+  // imgFilter.classList.remove(`img-filters--inactive`);
 
   const dataTransform = function (data) {
     data.forEach(function (item, index) {
@@ -17,10 +17,12 @@
     offers = data;
     dataTransform(offers);
     window.picture.render(offers);
+    imgFilter.classList.remove(`img-filters--inactive`);
   };
 
   const errorHandler = function (errorMessage) {
     window.popup.error(errorMessage);
+    imgFilter.classList.add(`img-filters--inactive`);
   };
 
   window.backend.download(successHandler, errorHandler);

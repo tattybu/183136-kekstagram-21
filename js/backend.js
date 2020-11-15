@@ -53,9 +53,10 @@
     xhr.open(Method.POST, END_POINT);
     xhr.send(data);
   };
-
   window.backend = {
     download,
     upload
   };
 })();
+
+

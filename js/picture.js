@@ -38,6 +38,6 @@
 
   window.picture = {
     render: fillElements,
-    remove: delElements
+    remove: delElements,
   };
 })();
